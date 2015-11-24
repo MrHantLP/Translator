@@ -31,8 +31,11 @@ namespace Translator
             ChosePath.Focus();
         }
 
+        //Считываем файл, если что выводим всякие ошибки
+        //Тут же текст программы приводится в божеский вид удобный для синтаксического анализа
         private void ChosePath_Click(object sender, EventArgs e)
         {
+            
             openFileDialog.FileName = "*.pas";
             openFileDialog.ShowDialog();    
             if (openFileDialog.FileName == null) return;
@@ -41,9 +44,7 @@ namespace Translator
                 RUN.Enabled = true;
                 StreamReader reader = new StreamReader(openFileDialog.FileName);
                 Code.allCode = reader.ReadToEnd() + "\r\n";
-                reader.Close();                 
-
-
+                reader.Close();              
             }
             catch (FileNotFoundException no_file)
             {
@@ -54,6 +55,23 @@ namespace Translator
                 MessageBox.Show(Unknown_e.Message, "Неизвестная ошибка", MessageBoxButtons.OK);
                 //throw;
             }
+        }
+
+        //Начинаем анализ кода 
+        private void RUN_Click(object sender, EventArgs e)
+        {
+            //****
+            //Начинает работу твой код можешь его хоть тут вставить 
+            //путь к файлу в openFileDialog.FileName сейчас сидит там можно взять Path и создавать файлы там вообщем как угодно
+            //или перенеси в выделенный класс весь код
+            //по феншую вроде так разкоменть то что ниже
+            //Lexer lexer = new Lexer(Code.allCode);
+            //if(lexer.goAnalyze()) Message.Box ("Всё круто"); else Давай досвидания;
+
+
+            
+
+                             
         }
     }
 }

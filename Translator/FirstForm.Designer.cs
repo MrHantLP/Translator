@@ -61,6 +61,7 @@
             this.RUN.TabIndex = 2;
             this.RUN.Text = "Провести анализ";
             this.RUN.UseVisualStyleBackColor = true;
+            this.RUN.Click += new System.EventHandler(this.RUN_Click);
             // 
             // openFileDialog
             // 

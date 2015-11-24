@@ -8,9 +8,21 @@ namespace Translator
 {
     class Lexer
     {
+        private String code; //чтоб из вне ничё не попортилось
+        public Lexer(String out_code)
+        {
+            code = out_code;
             //**********
-            //тут Гошин супер код
+            //чистка кода тут
             //**********
-          
+        }
+        public bool goAnalyze()
+        {
+            //*****
+            //код со всякими созданиями файлов и т.д. и т.п
+            //всё ок тру не ок фолс и можно почему
+            //***
+            return true;
+        }
     }
 }

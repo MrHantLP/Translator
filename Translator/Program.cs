@@ -6,9 +6,13 @@ using System.Windows.Forms;
 
 namespace Translator
 {
+    //Класс для работы с кодом из любой точки программы
     public static class Code
     {
+        //Весь исходный код тупо .pas файл
         public static String allCode;
+        //Код без мусора
+        public static String goodCode;
 
     }
     static class Program
