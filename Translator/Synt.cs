@@ -8,10 +8,11 @@ namespace Translator
 {
     class Synt
     {
+        //Обработка текста для нужд синтаксического анализатора
         public Synt()
         {
             Code.SyntError = "none";
-            code = Code.allCode;
+            code = Code.AllCode;
             int line = 1, column = -1;
             for (int i = 0; i < code.Length; i++, column++)
             {
@@ -45,12 +46,14 @@ namespace Translator
                 code = code.Replace("  ", " ");
 
         }
+
+        //Синтаксический анализ кода
         public bool GoAnalyze()
         {
             if (Code.SyntError != "none") return false;
 
-            Grammma.Init();
-
+            Gramma.Init();
+            
 
 
             return true;
