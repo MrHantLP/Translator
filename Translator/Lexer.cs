@@ -9,18 +9,20 @@ namespace Translator
     class Lexer
     {
         private String code; //чтоб из вне ничё не попортилось
-        public Lexer(String out_code)
+        public Lexer()
         {
-            code = out_code;
+            code = Code.AllCode;
             //**********
-            //чистка кода тут
+            //подгтовка делай что хошь
             //**********
         }
-        public bool goAnalyze()
+        public bool GoAnalyze()
         {
             //*****
             //код со всякими созданиями файлов и т.д. и т.п
-            //всё ок тру не ок фолс и можно почему
+            //все создания файлов и т.д делай тут и пути к ним в паблик статик в програм.кс прописывай
+            //папку возьми из пути к файлу он уже есть в паблик статике Code.pasPath , аналогично сделай переменные с путями к своим кей вёрдам и т.д
+            //Ошибку суй сюда Code.LexError
             //***
             return true;
         }
