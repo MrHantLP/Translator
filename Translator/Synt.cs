@@ -12,39 +12,7 @@ namespace Translator
         public Synt()
         {
             Code.SyntError = "none";
-            code = Code.AllCode;
-            int line = 1, column = -1;
-            for (int i = 0; i < code.Length; i++, column++)
-            {
-                if (code[i] == '\n')
-                {
-                    line++;
-                    column = -1;
-                }
-
-                if (code[i] == '\'')
-                {
-                    int j = 1;
-                    try
-                    {
-                        while (code[i + (j++)] != '\'') ;
-                        code = code.Remove(++i, j - 2);
-                    }
-                    catch (Exception e)
-                    {
-                        Code.SyntError = "В строке " + line + " столбце " + column + " ожидалось \' (апостраф, символ конца строки)";
-                        return;
-                    }
-
-                }
-            }
-
-            code = code.Replace("\r\n", " ");
-            code = code.Replace(";", " ; ");
-            code = code.Replace("..", " .. ");
-            while (code.IndexOf("  ") != -1)
-                code = code.Replace("  ", " ");
-
+            code = Code.AllCode;     
         }
 
         //Синтаксический анализ кода
@@ -52,10 +20,7 @@ namespace Translator
         {
             if (Code.SyntError != "none") return false;
 
-            Gramma.Init();
-            
-
-
+           
             return true;
         }
         private String code;
