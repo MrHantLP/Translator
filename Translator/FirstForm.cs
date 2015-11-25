@@ -21,7 +21,7 @@ namespace Translator
 
         private void FirstForm_Load(object sender, EventArgs e)
         {
-            
+
             RUN.Enabled = false;
 
         }
@@ -31,20 +31,19 @@ namespace Translator
             ChosePath.Focus();
         }
 
-        //Считываем файл, если что выводим всякие ошибки
-        //Тут же текст программы приводится в божеский вид удобный для синтаксического анализа
+        //Считываем файл, если что выводим всякие ошибки 
         private void ChosePath_Click(object sender, EventArgs e)
         {
-            
             openFileDialog.FileName = "*.pas";
-            openFileDialog.ShowDialog();    
+            openFileDialog.ShowDialog();
             if (openFileDialog.FileName == null) return;
             try
             {
                 RUN.Enabled = true;
                 StreamReader reader = new StreamReader(openFileDialog.FileName);
-                Code.allCode = reader.ReadToEnd() + "\r\n";
-                reader.Close();              
+                Code.AllCode = reader.ReadToEnd() + "\r\n";
+                reader.Close();
+                Code.PasPath = FileLocation.Text = openFileDialog.FileName;
             }
             catch (FileNotFoundException no_file)
             {
@@ -60,18 +59,41 @@ namespace Translator
         //Начинаем анализ кода 
         private void RUN_Click(object sender, EventArgs e)
         {
-            //****
-            //Начинает работу твой код можешь его хоть тут вставить 
-            //путь к файлу в openFileDialog.FileName сейчас сидит там можно взять Path и создавать файлы там вообщем как угодно
-            //или перенеси в выделенный класс весь код
-            //по феншую вроде так разкоменть то что ниже
-            //Lexer lexer = new Lexer(Code.allCode);
-            //if(lexer.goAnalyze()) Message.Box ("Всё круто"); else Давай досвидания;
+            //Лексический анализ
+            Lexer lexer=new Lexer();
+            if (lexer.GoAnalyze())
+            {
+                MessageBox.Show("Ваш код прошёл проверку лексического анализатора", "Лексический анализатор: Успех =)", MessageBoxButtons.OK);
+            }
+            else
+            {
+                MessageBox.Show("Ошибка: " + Code.LexError + "\nПроцесстрансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
+                return;
+            }
 
+            //Синтаксический анализ
+            Synt syntax = new Synt();
+            if (syntax.GoAnalyze())
+            {
+                MessageBox.Show("Ваш код прошёл проверку синтаксического анализатора", "Синтаксический анализатор: Успех =)", MessageBoxButtons.OK);
+            }
+            else
+            {
+                MessageBox.Show("Ошибка: " + Code.SyntError + "\nПроцесстрансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
+                return;
+            }
 
-            
-
-                             
+            //Генерация кода
+            Generation gener=new Generation();
+            if (gener.GoGenerate())
+            {
+                MessageBox.Show("Ваш код на языке Pascal успешно транслирован на язык C# \nФайл расположен в директории \""+Code.CsPath+"\"", "Генератор кода: Успех =)", MessageBoxButtons.OK);
+            }
+            else
+            {
+                MessageBox.Show("Ошибка: " + Code.GenerationError + "\nПроцесстрансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
+                return;
+            }
         }
     }
 }
