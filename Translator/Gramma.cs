@@ -12,10 +12,9 @@ namespace Translator
         public String leftSide;
         public struct structRightSide
         {
-            public String text, notTerminal, terminal;
-            public structRightSide(String t, String n, String term)
-            {
-                text = t;
+            public String notTerminal, terminal;
+            public structRightSide(String n, String term)
+            {                 
                 notTerminal = n;
                 terminal = term;
             }
@@ -39,10 +38,10 @@ namespace Translator
             f.leftSide = "main";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "header", ""));
-            alternative.Add(new Pravilo.structRightSide(" ; ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "body", ""));
-            alternative.Add(new Pravilo.structRightSide(" . ", "", ""));
+            alternative.Add(new Pravilo.structRightSide("header", ""));
+            alternative.Add(new Pravilo.structRightSide("", " ; "));
+            alternative.Add(new Pravilo.structRightSide("body", ""));
+            alternative.Add(new Pravilo.structRightSide("", " . "));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -54,9 +53,9 @@ namespace Translator
             f.leftSide = "header";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("program ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "identificator", ""));
-            alternative.Add(new Pravilo.structRightSide(" ; ", "", ""));
+            alternative.Add(new Pravilo.structRightSide("", "program "));
+            alternative.Add(new Pravilo.structRightSide("identificator", ""));
+            alternative.Add(new Pravilo.structRightSide("", " ; "));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -67,8 +66,8 @@ namespace Translator
             f.leftSide = "body";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "opis-part", ""));
-            alternative.Add(new Pravilo.structRightSide("", "work-part", ""));
+            alternative.Add(new Pravilo.structRightSide("opis-part", ""));
+            alternative.Add(new Pravilo.structRightSide("work-part", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -80,8 +79,8 @@ namespace Translator
             f.leftSide = "opis-part";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "opis-const1", ""));
-            alternative.Add(new Pravilo.structRightSide("", "opis-perem1", ""));
+            alternative.Add(new Pravilo.structRightSide("opis-const1", ""));
+            alternative.Add(new Pravilo.structRightSide("opis-perem1", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -93,12 +92,12 @@ namespace Translator
             f.leftSide = "opis-const1";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "opis-const", ""));
+            alternative.Add(new Pravilo.structRightSide("opis-const", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "lambda"));
+            alternative.Add(new Pravilo.structRightSide("", "lambda"));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -109,12 +108,12 @@ namespace Translator
             f.leftSide = "opis-perem1";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "opis-perem", ""));
+            alternative.Add(new Pravilo.structRightSide("opis-perem", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "lambda"));
+            alternative.Add(new Pravilo.structRightSide("", "lambda"));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -125,10 +124,10 @@ namespace Translator
             f.leftSide = "opis-const";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("const ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "opis-constant", ""));
-            alternative.Add(new Pravilo.structRightSide(" ; ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "opis-constant1", ""));
+            alternative.Add(new Pravilo.structRightSide("", "const "));
+            alternative.Add(new Pravilo.structRightSide("opis-constant", ""));
+            alternative.Add(new Pravilo.structRightSide("", " ; "));
+            alternative.Add(new Pravilo.structRightSide("opis-constant1", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -141,14 +140,14 @@ namespace Translator
             f.leftSide = "opis-constant1";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "opis-constant", ""));
-            alternative.Add(new Pravilo.structRightSide(" ; ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "opis-constant1", ""));
+            alternative.Add(new Pravilo.structRightSide("opis-constant", ""));
+            alternative.Add(new Pravilo.structRightSide("", " ; "));
+            alternative.Add(new Pravilo.structRightSide("opis-constant1", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "lambda"));
+            alternative.Add(new Pravilo.structRightSide("", "lambda"));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -160,9 +159,9 @@ namespace Translator
             f.leftSide = "opis-constant";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "id-const", ""));
-            alternative.Add(new Pravilo.structRightSide(" = ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "const", ""));
+            alternative.Add(new Pravilo.structRightSide("id-const", ""));
+            alternative.Add(new Pravilo.structRightSide("", " = "));
+            alternative.Add(new Pravilo.structRightSide("const", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -174,7 +173,7 @@ namespace Translator
             f.leftSide = "id-const";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "id", ""));
+            alternative.Add(new Pravilo.structRightSide("id", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -186,18 +185,18 @@ namespace Translator
             f.leftSide = "const";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "sign1", ""));
-            alternative.Add(new Pravilo.structRightSide("", "num", ""));
+            alternative.Add(new Pravilo.structRightSide("sign1", ""));
+            alternative.Add(new Pravilo.structRightSide("num", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "sign1", ""));
-            alternative.Add(new Pravilo.structRightSide("", "id", ""));
+            alternative.Add(new Pravilo.structRightSide("sign1", ""));
+            alternative.Add(new Pravilo.structRightSide("id", ""));
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "string", ""));
+            alternative.Add(new Pravilo.structRightSide("string", ""));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -208,13 +207,13 @@ namespace Translator
             f.leftSide = "sign1";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "sign", ""));
+            alternative.Add(new Pravilo.structRightSide("sign", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "lambda"));
+            alternative.Add(new Pravilo.structRightSide("", "lambda"));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -225,10 +224,10 @@ namespace Translator
             f.leftSide = "opis-perem";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("var ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "opis-peremenix", ""));
-            alternative.Add(new Pravilo.structRightSide(" ; ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "opis-peremenix1", ""));
+            alternative.Add(new Pravilo.structRightSide("", " var "));
+            alternative.Add(new Pravilo.structRightSide("opis-peremenix", ""));
+            alternative.Add(new Pravilo.structRightSide("", " ; "));
+            alternative.Add(new Pravilo.structRightSide("opis-peremenix1", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -241,14 +240,14 @@ namespace Translator
             f.leftSide = "opis-peremenix1";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "opis-peremenix", ""));
-            alternative.Add(new Pravilo.structRightSide(" ; ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "opis-peremenix1", ""));
+            alternative.Add(new Pravilo.structRightSide("opis-peremenix", ""));
+            alternative.Add(new Pravilo.structRightSide("", " ; "));
+            alternative.Add(new Pravilo.structRightSide("opis-peremenix1", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "lambda"));
+            alternative.Add(new Pravilo.structRightSide("", "lambda"));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -259,11 +258,11 @@ namespace Translator
             f.leftSide = "opis-peremenix";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "id", ""));
-            alternative.Add(new Pravilo.structRightSide("", "id1", ""));
-            alternative.Add(new Pravilo.structRightSide(" : ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "type", ""));
-            alternative.Add(new Pravilo.structRightSide(" ; ", "", ""));
+            alternative.Add(new Pravilo.structRightSide("id", ""));
+            alternative.Add(new Pravilo.structRightSide("id1", ""));
+            alternative.Add(new Pravilo.structRightSide("", " : "));
+            alternative.Add(new Pravilo.structRightSide("type", ""));
+            alternative.Add(new Pravilo.structRightSide("", " ; "));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -277,14 +276,14 @@ namespace Translator
             f.leftSide = "id1";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide(" , ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "id", ""));
-            alternative.Add(new Pravilo.structRightSide("", "id1", ""));
+            alternative.Add(new Pravilo.structRightSide("", " , "));
+            alternative.Add(new Pravilo.structRightSide("id", ""));
+            alternative.Add(new Pravilo.structRightSide("id1", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "lambda"));
+            alternative.Add(new Pravilo.structRightSide("", "lambda"));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -297,12 +296,12 @@ namespace Translator
             f.leftSide = "type";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "array", ""));
+            alternative.Add(new Pravilo.structRightSide("array", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "elem-type", ""));
+            alternative.Add(new Pravilo.structRightSide("elem-type", ""));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -314,11 +313,11 @@ namespace Translator
             f.leftSide = "array";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide(" array [ ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "index-type", ""));
-            alternative.Add(new Pravilo.structRightSide("", "index-type1", ""));
-            alternative.Add(new Pravilo.structRightSide(" ] of ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "elem-type", ""));
+            alternative.Add(new Pravilo.structRightSide("", " array [ "));
+            alternative.Add(new Pravilo.structRightSide("index-type", ""));
+            alternative.Add(new Pravilo.structRightSide("index-type1", ""));
+            alternative.Add(new Pravilo.structRightSide("", " ] of "));
+            alternative.Add(new Pravilo.structRightSide("elem-type", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -330,14 +329,14 @@ namespace Translator
             f.leftSide = "index-type1";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide(" , ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "index-type", ""));
-            alternative.Add(new Pravilo.structRightSide("", "index-type1", ""));
+            alternative.Add(new Pravilo.structRightSide("", " , "));
+            alternative.Add(new Pravilo.structRightSide("index-type", ""));
+            alternative.Add(new Pravilo.structRightSide("index-type1", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "lambda"));
+            alternative.Add(new Pravilo.structRightSide("", "lambda"));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -348,9 +347,9 @@ namespace Translator
             f.leftSide = "index-type";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "integer", ""));
-            alternative.Add(new Pravilo.structRightSide(" .. ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "integer", ""));
+            alternative.Add(new Pravilo.structRightSide("integer", ""));
+            alternative.Add(new Pravilo.structRightSide("", " .. "));
+            alternative.Add(new Pravilo.structRightSide("integer", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -363,22 +362,22 @@ namespace Translator
             f.leftSide = "elem-type";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "Integer"));
+            alternative.Add(new Pravilo.structRightSide("", " integer "));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "Real"));
+            alternative.Add(new Pravilo.structRightSide("", " real "));
             f.rightSide.Add(alternative);
 
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "Boolean"));
+            alternative.Add(new Pravilo.structRightSide("", " boolean "));
             f.rightSide.Add(alternative);
 
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "String"));
+            alternative.Add(new Pravilo.structRightSide("", " string "));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -390,9 +389,9 @@ namespace Translator
             f.leftSide = "work-part";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide(" begin ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "work-seq", ""));
-            alternative.Add(new Pravilo.structRightSide(" end ", "", ""));
+            alternative.Add(new Pravilo.structRightSide("", " begin "));
+            alternative.Add(new Pravilo.structRightSide("work-seq", ""));
+            alternative.Add(new Pravilo.structRightSide("", " end "));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -404,9 +403,9 @@ namespace Translator
             f.leftSide = "work-seq";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "utv", ""));
-            alternative.Add(new Pravilo.structRightSide(" ; ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "utv1", ""));
+            alternative.Add(new Pravilo.structRightSide("utv", ""));
+            alternative.Add(new Pravilo.structRightSide("", " ; "));
+            alternative.Add(new Pravilo.structRightSide("utv1", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -418,14 +417,14 @@ namespace Translator
             f.leftSide = "utv1";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "utv", ""));
-            alternative.Add(new Pravilo.structRightSide(" ; ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "utv1", ""));
+            alternative.Add(new Pravilo.structRightSide("utv", ""));
+            alternative.Add(new Pravilo.structRightSide("", " ; "));
+            alternative.Add(new Pravilo.structRightSide("utv1", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "lambda"));
+            alternative.Add(new Pravilo.structRightSide("", "lambda"));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -435,17 +434,17 @@ namespace Translator
             f.leftSide = "utv";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "prost-utv", ""));
+            alternative.Add(new Pravilo.structRightSide("prost-utv", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "struct-utv", ""));
+            alternative.Add(new Pravilo.structRightSide("struct-utv", ""));
             f.rightSide.Add(alternative);
 
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "in-out", ""));
+            alternative.Add(new Pravilo.structRightSide("in-out", ""));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -457,9 +456,9 @@ namespace Translator
             f.leftSide = "prost-utv";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "perem", ""));
-            alternative.Add(new Pravilo.structRightSide(" := ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "virag", ""));
+            alternative.Add(new Pravilo.structRightSide("perem", ""));
+            alternative.Add(new Pravilo.structRightSide("", " := "));
+            alternative.Add(new Pravilo.structRightSide("virag", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -470,22 +469,22 @@ namespace Translator
             f.leftSide = "struct-utv";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "pod-utv", ""));
+            alternative.Add(new Pravilo.structRightSide("pod-utv", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "while", ""));
+            alternative.Add(new Pravilo.structRightSide("while", ""));
             f.rightSide.Add(alternative);
 
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "for", ""));
+            alternative.Add(new Pravilo.structRightSide("for", ""));
             f.rightSide.Add(alternative);
 
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "if", ""));
+            alternative.Add(new Pravilo.structRightSide("if", ""));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -495,9 +494,9 @@ namespace Translator
             f.leftSide = "pod-utv";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide(" begin ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "work-seq", ""));
-            alternative.Add(new Pravilo.structRightSide(" end ", "", ""));
+            alternative.Add(new Pravilo.structRightSide("", " begin "));
+            alternative.Add(new Pravilo.structRightSide("work-seq", ""));
+            alternative.Add(new Pravilo.structRightSide("", " end "));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -509,10 +508,10 @@ namespace Translator
             f.leftSide = "while";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide(" while ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "virag", ""));
-            alternative.Add(new Pravilo.structRightSide(" do ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "utv", ""));
+            alternative.Add(new Pravilo.structRightSide("", " while "));
+            alternative.Add(new Pravilo.structRightSide("virag", ""));
+            alternative.Add(new Pravilo.structRightSide("", " do "));
+            alternative.Add(new Pravilo.structRightSide("utv", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -523,27 +522,27 @@ namespace Translator
             f.leftSide = "for";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide(" for ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "id", ""));
-            alternative.Add(new Pravilo.structRightSide(" := ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "integer", ""));
-            alternative.Add(new Pravilo.structRightSide(" to ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "integer", ""));
-            alternative.Add(new Pravilo.structRightSide(" do ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "utv", ""));
+            alternative.Add(new Pravilo.structRightSide("", " for "));
+            alternative.Add(new Pravilo.structRightSide("id", ""));
+            alternative.Add(new Pravilo.structRightSide("", " := "));
+            alternative.Add(new Pravilo.structRightSide("integer", ""));
+            alternative.Add(new Pravilo.structRightSide("", " to "));
+            alternative.Add(new Pravilo.structRightSide("integer", ""));
+            alternative.Add(new Pravilo.structRightSide("", " do "));
+            alternative.Add(new Pravilo.structRightSide("utv", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide(" for ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "id", ""));
-            alternative.Add(new Pravilo.structRightSide(" := ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "integer", ""));
-            alternative.Add(new Pravilo.structRightSide(" downto ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "integer", ""));
-            alternative.Add(new Pravilo.structRightSide(" do ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "utv", ""));
+            alternative.Add(new Pravilo.structRightSide("", " for "));
+            alternative.Add(new Pravilo.structRightSide("id", ""));
+            alternative.Add(new Pravilo.structRightSide("", " := "));
+            alternative.Add(new Pravilo.structRightSide("integer", ""));
+            alternative.Add(new Pravilo.structRightSide("", " downto "));
+            alternative.Add(new Pravilo.structRightSide("integer", ""));
+            alternative.Add(new Pravilo.structRightSide("", " do "));
+            alternative.Add(new Pravilo.structRightSide("utv", ""));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -554,11 +553,11 @@ namespace Translator
             f.leftSide = "if";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("if ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "virag", ""));
-            alternative.Add(new Pravilo.structRightSide(" then ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "utv", ""));
-            alternative.Add(new Pravilo.structRightSide("", "utv2", ""));
+            alternative.Add(new Pravilo.structRightSide("", "if "));
+            alternative.Add(new Pravilo.structRightSide("virag", ""));
+            alternative.Add(new Pravilo.structRightSide("", " then "));
+            alternative.Add(new Pravilo.structRightSide("utv", ""));
+            alternative.Add(new Pravilo.structRightSide("utv2", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -571,13 +570,13 @@ namespace Translator
             f.leftSide = "utv2";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide(" else ", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "utv", ""));
+            alternative.Add(new Pravilo.structRightSide("", " else "));
+            alternative.Add(new Pravilo.structRightSide("utv", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "lambda"));
+            alternative.Add(new Pravilo.structRightSide("", "lambda"));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -589,8 +588,8 @@ namespace Translator
             f.leftSide = "virag";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "prost-virag", ""));
-            alternative.Add(new Pravilo.structRightSide("", "op-prost-virag", ""));
+            alternative.Add(new Pravilo.structRightSide("prost-virag", ""));
+            alternative.Add(new Pravilo.structRightSide("op-prost-virag", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -602,13 +601,13 @@ namespace Translator
             f.leftSide = "op-prost-virag";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "op-otn", ""));
-            alternative.Add(new Pravilo.structRightSide("", "prost-virag", ""));
+            alternative.Add(new Pravilo.structRightSide("op-otn", ""));
+            alternative.Add(new Pravilo.structRightSide("prost-virag", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", "lambda"));
+            alternative.Add(new Pravilo.structRightSide("", "lambda"));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -618,30 +617,30 @@ namespace Translator
             f.leftSide = "op-otn";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", " = "));
+            alternative.Add(new Pravilo.structRightSide("", " = "));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", " <> "));
+            alternative.Add(new Pravilo.structRightSide("", " <> "));
             f.rightSide.Add(alternative);
 
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", " < "));
+            alternative.Add(new Pravilo.structRightSide("", " < "));
             f.rightSide.Add(alternative);
 
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", " <= "));
+            alternative.Add(new Pravilo.structRightSide("", " <= "));
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", " > "));
+            alternative.Add(new Pravilo.structRightSide("", " > "));
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", " >= "));
+            alternative.Add(new Pravilo.structRightSide("", " >= "));
             f.rightSide.Add(alternative);
 
             p.Add(f);
@@ -652,9 +651,9 @@ namespace Translator
             f.leftSide = "";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "", ""));
+            alternative.Add(new Pravilo.structRightSide("", ""));
+            alternative.Add(new Pravilo.structRightSide("", ""));
+            alternative.Add(new Pravilo.structRightSide("", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
@@ -666,14 +665,14 @@ namespace Translator
             f.leftSide = "";
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "", ""));
-            alternative.Add(new Pravilo.structRightSide("", "", ""));
+            alternative.Add(new Pravilo.structRightSide("", ""));
+            alternative.Add(new Pravilo.structRightSide("", ""));
+            alternative.Add(new Pravilo.structRightSide("", ""));
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
             alternative = new List<Pravilo.structRightSide>();
-            alternative.Add(new Pravilo.structRightSide("", "", ""));
+            alternative.Add(new Pravilo.structRightSide("", ""));
             f.rightSide.Add(alternative);
 
             p.Add(f);
