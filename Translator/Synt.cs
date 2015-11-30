@@ -53,7 +53,11 @@ namespace Translator
             if (Code.SyntError != "none") return false;
 
             Gramma.Init();
-            
+#if DEBUG
+            Gramma.Check();
+#endif
+
+
 
 
             return true;

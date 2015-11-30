@@ -24,6 +24,17 @@ namespace Translator
 
             RUN.Enabled = false;
 
+
+#if DEBUG
+            //***debug only***
+            Code.PasPath = "C:\\test\\text11.pas";
+            StreamReader reader = new StreamReader(Code.PasPath);
+            Code.AllCode = reader.ReadToEnd() + "\r\n";
+            reader.Close();
+            RUN.Enabled = true;
+            //****************
+#endif   
+
         }
 
         private void FirstForm_Shown(object sender, EventArgs e)
@@ -59,6 +70,7 @@ namespace Translator
         //Начинаем анализ кода 
         private void RUN_Click(object sender, EventArgs e)
         {
+            
             //Лексический анализ
             Lexer lexer=new Lexer();
             if (lexer.GoAnalyze())
