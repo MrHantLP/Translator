@@ -1,0 +1,1 @@
+program,const,var,array,of,integer,real,boolean,string,begin,end,or,div,mod,and,read,readln,write,writeln,while,do,for,to,downto,if,then,else,true,false,
