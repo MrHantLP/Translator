@@ -30,7 +30,7 @@ namespace Translator
                         while (code[i + (j++)] != '\'') ;
                         code = code.Remove(++i, j - 2);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         Code.SyntError = "В строке " + line + " столбце " + column + " ожидалось \' (апостраф, символ конца строки)";
                         return;
@@ -50,19 +50,266 @@ namespace Translator
         //Синтаксический анализ кода
         public bool GoAnalyze()
         {
-            if (Code.SyntError != "none") return false;    
+            if (Code.SyntError != "none") return false;
+
+
+
+
             Gramma.Init();
 #if DEBUG
             Gramma.Check();
 #endif
+            Configuration config = new Configuration();
+
+            //История конфигураций
+            Stack<Configuration> history = new Stack<Configuration>();
+            history.Push(config);
 
 
+            while (true) //додумать условие цикла
+            {
+                //Отношение перехода делаем на токенах
+
+                if (config.s == 'q')
+                {
+                    if (config.L2.Count != 0)
+                    {
+                        //1 пункт отношения, "На верху L2 не терминал, растим дерево"
+                        if (!config.L2.Peek().term)
+                        {
+
+                            Configuration.elem item = new Configuration.elem(config.L2.Pop());
+                            Pravilo current = Gramma.p.Find(x => x.leftSide == item.value); //текущее правило
+                            if (item.value != "string")    //првоеряю не ожидалась ли строка
+                            {
+                                if (item.value != "chislo" && item.value != "integer" && item.value != "real")
+                                {
+                                    if (item.value != "id")
+                                    {
+
+                                        config.L1.Push(new Configuration.elem(current.leftSide, false, 1));//в магазин L1 суём левую часть правила
+                                        for (int altIndex = current.rightSide[0].Count - 1; altIndex >= 0; altIndex--)//суём первую альтернативу в магазин L2 по элементно
+                                        {
+                                            if (current.rightSide[0][altIndex].notTerminal != "")
+                                            {
+                                                config.L2.Push(new Configuration.elem(current.rightSide[0][altIndex].notTerminal, false, 1));
+                                            }
+                                            else
+                                            {
+                                                config.L2.Push(new Configuration.elem(current.rightSide[0][altIndex].terminal, true, 1));
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //Успешное прохождение идентификатора
+                                        if (Code.Tokens[config.i].klass == "идентификатор")
+                                        {
+                                            config.L1.Push(new Configuration.elem(current.leftSide, false, 1));
+                                            config.L2.Push(new Configuration.elem(Code.Tokens[config.i].value, true, 1));
+
+                                        }
+                                        else
+                                        {
+                                            config.L1.Push(new Configuration.elem(current.leftSide, false, 1));//в магазин L1 суём левую часть правила
+                                            for (int altIndex = current.rightSide[0].Count - 1; altIndex >= 0; altIndex--)//суём первую альтернативу в магазин L2 по элементно
+                                            {
+                                                if (current.rightSide[0][altIndex].notTerminal != "")
+                                                {
+                                                    config.L2.Push(new Configuration.elem(current.rightSide[0][altIndex].notTerminal, false, 1));
+                                                }
+                                                else
+                                                {
+                                                    config.L2.Push(new Configuration.elem(current.rightSide[0][altIndex].terminal, true, 1));
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    //Успешное прохождение числа
+                                    if (Code.Tokens[config.i].klass == "число   ")
+                                    {
+                                        if (Code.Tokens[config.i].type == "real")
+                                        {
+                                            config.L1.Push(new Configuration.elem(current.leftSide, false, 2));
+                                            config.L2.Push(new Configuration.elem(Code.Tokens[config.i].value, true, 2));
+                                        }
+                                        else
+                                        {
+                                            config.L1.Push(new Configuration.elem(current.leftSide, false, 1));
+                                            config.L2.Push(new Configuration.elem(Code.Tokens[config.i].value, true, 1));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        /*
+                                        Code.SyntError = "В строке " + Code.Tokens[config.i].str_num + " столбце " + Code.Tokens[config.i].pos_num + " ожидалось число";
+                                        return false;
+                                         */
+                                        config.L1.Push(new Configuration.elem(current.leftSide, false, 1));//в магазин L1 суём левую часть правила
+                                        for (int altIndex = current.rightSide[0].Count - 1; altIndex >= 0; altIndex--)//суём первую альтернативу в магазин L2 по элементно
+                                        {
+                                            if (current.rightSide[0][altIndex].notTerminal != "")
+                                            {
+                                                config.L2.Push(new Configuration.elem(current.rightSide[0][altIndex].notTerminal, false, 1));
+                                            }
+                                            else
+                                            {
+                                                config.L2.Push(new Configuration.elem(current.rightSide[0][altIndex].terminal, true, 1));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //Успешное прохождение строки
+                                if (Code.Tokens[config.i].klass == "строка")
+                                {
+                                    config.L1.Push(new Configuration.elem(current.leftSide, false, 1));
+                                    config.L2.Push(new Configuration.elem(Code.Tokens[config.i].value, true, 1));
+                                }
+                                else
+                                {
+                                    /*
+                                    Code.SyntError = "В строке " + Code.Tokens[config.i].str_num + " столбце " + Code.Tokens[config.i].pos_num + " ожидалась строка";
+                                    return false;
+                                        */
+                                    config.L1.Push(new Configuration.elem(current.leftSide, false, 1));//в магазин L1 суём левую часть правила
+                                    for (int altIndex = current.rightSide[0].Count - 1; altIndex >= 0; altIndex--)//суём первую альтернативу в магазин L2 по элементно
+                                    {
+                                        if (current.rightSide[0][altIndex].notTerminal != "")
+                                        {
+                                            config.L2.Push(new Configuration.elem(current.rightSide[0][altIndex].notTerminal, false, 1));
+                                        }
+                                        else
+                                        {
+                                            config.L2.Push(new Configuration.elem(current.rightSide[0][altIndex].terminal, true, 1));
+                                        }
+                                    }
+                                }
+                            }
+                            history.Push(config);
+                        }
+
+                        //2 пункт отношения, "На верху L2 терминал сравниваем входной токен"
+                        else
+                        {
+                            Configuration.elem item = new Configuration.elem(config.L2.Peek());
+                            //"Успешное сравнение"
+                            if ((Code.Tokens[config.i].value == item.value) || (item.value == "lambda"))
+                            {
+                                config.L2.Pop();
+                                config.L1.Push(item);
+                                if (item.value != "lambda") config.i++;
+                            }
+                            //4 пункт отношения. Не успешное сравнение
+                            else
+                            {
+
+                                config.s = 'b';
+                            }
+                            history.Push(config);
+                        }
+                    }
+                    else
+                    {
+                        //3 пункт отншения. Успешное завершение
+                        if (config.i == Code.Tokens.Count)
+                        {
+                            config.s = 't';
+                            config.L2.Push(new Configuration.elem("lambda", true, 0));
+                            history.Push(config);
+                            Code.conclusion= config.Seq();
+                            return true;
+                        }
+                        else
+                        {
+                            Code.SyntError = "Неожиданный конец файла";
+                            return false;
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (!config.L1.Peek().term)
+                    //6. Испытание очередной альтернативы
+                    {
+                        //тестовый костыль
+                        if (!config.L2.Peek().term || !(config.L1.Peek().value == "id"))
+                        {
+
+                            Configuration.elem item = new Configuration.elem(config.L1.Pop());
+                            Pravilo current = Gramma.p.Find(x => x.leftSide == item.value); //текущее правило    
+                            if (current.rightSide.Count > item.altIndex)
+                            //a. замена альтернативы если существует следующая альтернатива
+                            {
+                                for (int elemIndex = 0; elemIndex < current.rightSide[item.altIndex - 1].Count; elemIndex++)
+                                {
+                                    config.L2.Pop();
+                                }
+                                for (int elemIndex = current.rightSide[item.altIndex].Count - 1; elemIndex >= 0; elemIndex--)//суём j+1 альтернативу в магазин L2 по элементно
+                                {
+                                    if (current.rightSide[item.altIndex][elemIndex].notTerminal != "")
+                                    {
+                                        config.L2.Push(new Configuration.elem(current.rightSide[item.altIndex][elemIndex].notTerminal, false, item.altIndex + 1));
+                                    }
+                                    else
+                                    {
+                                        config.L2.Push(new Configuration.elem(current.rightSide[item.altIndex][elemIndex].terminal, true, item.altIndex + 1));
+                                    }
+                                }
+                                item.altIndex++;
+                                config.L1.Push(item);
+                                config.s = 'q';
+                            }
+                            else
+                            {
+                                if (config.i == 1 && item.value == "main")
+                                //б. прекращение разбора
+                                {
+                                    Code.SyntError = "Цепочка не принадлежит языку";
+                                }
+                                else
+                                //в. Отмена результата
+                                {
+                                    for (int elemIndex = 0; elemIndex < current.rightSide[item.altIndex - 1].Count; elemIndex++)
+                                    {
+                                        config.L2.Pop();
+                                    }
+                                    config.L2.Push(new Configuration.elem(item.value, false, 1));
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            config.L2.Pop();
+                            config.L2.Push(new Configuration.elem(config.L1.Pop().value, false, 1));
+                        }
+                    }
+
+                    else
+                    //5 Возврат по ходу
+                    {
+                        Configuration.elem item = new Configuration.elem(config.L1.Pop());
+                        config.L2.Push(item);
+                        //config.L2.Push(config.L1.Pop()); //на будующее когда всё будет работать   
+                        if (item.value != "lambda") config.i--;
+                    }
+                    history.Push(config);
+                }
+            }
 
 
-
-
-            return true;
         }
+
+
+
+
         private String code;
     }
 }
