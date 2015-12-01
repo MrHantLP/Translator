@@ -27,7 +27,7 @@ namespace Translator
 
 #if DEBUG
             //***debug only***
-            Code.PasPath = "C:\\test\\text11.pas";
+            Code.PasPath = "C:\\Users\\mrhan\\OneDrive\\PROG\\Visual C#\\Translator\\Translator\\bin\\Debug\\text11.pas";
             StreamReader reader = new StreamReader(Code.PasPath);
             Code.AllCode = reader.ReadToEnd() + "\r\n";
             reader.Close();
