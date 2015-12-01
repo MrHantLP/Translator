@@ -40,8 +40,8 @@ namespace Translator
             }
 
             code = code.Replace("\r\n", " ");
-            code = code.Replace(";", " ; ");
-            code = code.Replace("..", " .. ");
+            //code = code.Replace(";", " ; ");
+            //code = code.Replace("..", " .. ");
             while (code.IndexOf("  ") != -1)
                 code = code.Replace("  ", " ");
 
@@ -50,12 +50,13 @@ namespace Translator
         //Синтаксический анализ кода
         public bool GoAnalyze()
         {
-            if (Code.SyntError != "none") return false;
-
+            if (Code.SyntError != "none") return false;    
             Gramma.Init();
 #if DEBUG
             Gramma.Check();
 #endif
+
+
 
 
 

@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Translator
 {
-    class Token
+    public class Token
     {
         public Token(string kl = "",string va= "",string ty = "",int ad=0,int st=0,int po=0)
         {
@@ -37,6 +37,7 @@ namespace Translator
 
             string res = klass + '\t' + value + '\t' + type + '\t' + adress.ToString() + '\t' + str_num.ToString() + '\t' + pos_num.ToString() + "\r\n";
             File.AppendAllText("result.txt", res);
+            
         }
         public void define(string lex, int id, ref string text)
         {

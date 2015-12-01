@@ -106,6 +106,8 @@ namespace Translator
                 MessageBox.Show("Ошибка: " + Code.GenerationError + "\nПроцесстрансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
                 return;
             }
+            Code.Idents = new List<String>();
+            Code.Tokens = new List<Token>();
         }
     }
 }
