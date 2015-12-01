@@ -21,15 +21,15 @@ namespace Translator
         }
         public static List<string> iden = new List <string>(); //список идентификаторов
         public static List<string> keys = new List <string>(); // список ключевых слов
-        static int count=0;
-        static int NUM_STR = 1;
-        static int NUM_POS = 0; 
-        string klass; // класс лексемы
-        string value; // значение лексемы
-        string type; // тип лексемы
-        int adress; //  адрес лексемы в таблице имён или таблице ключей
-        int str_num; // номер строки
-        int pos_num; // номер позиции в строке
+        public static int count=0;
+        public static int NUM_STR = 1;
+        public static int NUM_POS = 0; 
+        public string klass; // класс лексемы
+        public string value; // значение лексемы
+        public string type; // тип лексемы
+        public int adress; //  адрес лексемы в таблице имён или таблице ключей
+        public int str_num; // номер строки
+        public int pos_num; // номер позиции в строке
 
        
         public void conclude()
