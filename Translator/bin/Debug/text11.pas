@@ -8,6 +8,6 @@ begin
        s2:=s2+s1[i];
 	   i:=i mod 2;
     end;
-    if s1=s2 then writeln(s1, ' - perevertish')
+    if s1=s2 then writeln(s1, 'папа - perevertish')
              else  writeln(s1, ' - ne perevertish');
 end.

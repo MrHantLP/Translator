@@ -25,89 +25,111 @@ namespace Translator
             //папку возьми из пути к файлу он уже есть в паблик статике Code.pasPath , аналогично сделай переменные с путями к своим кей вёрдам и т.д
             //Ошибку суй сюда Code.LexError
             //***
-            //string path = PasPath;
+            //string path = PasPath;    
             File.Delete("result.txt");
-            FileStream file_key = new FileStream("keys.txt", FileMode.Open, FileAccess.Read);
-            StreamReader reader_key = new StreamReader(file_key);
-            string k = reader_key.ReadToEnd();
-            if (!File.Exists("keywords.txt")) File.Create("keywords.txt");
-            if (!File.Exists("identify.txt")) File.Create("identify.txt");
-            reader_key.Close();
-            while (!String.IsNullOrEmpty(k))
+           //File.Delete("keywords.txt");
+            //File.Delete("identify.txt");
+            if (File.Exists("keys.txt"))
             {
-                string str = "";
-                int i = 0;
-                while (k[i] != ',')
+                FileStream file_key = new FileStream("keys.txt", FileMode.Open, FileAccess.Read);
+                StreamReader reader_key = new StreamReader(file_key);
+                string k = reader_key.ReadToEnd();
+                if (k != "")
                 {
-                    str = str + k[i];
-                    i++;
-                }
-                if (!String.IsNullOrEmpty(k)) k = k.Substring(i + 1);
-                Token.keys.Add(str);
-            }
-            List<Token> ending = new List<Token>();
-            FileStream file1 = new FileStream("keywords.txt", FileMode.Open, FileAccess.Write);
-            FileStream file2 = new FileStream("identify.txt", FileMode.Open, FileAccess.Write);
-            StreamWriter writer = new StreamWriter(file1);// 
-            StreamWriter writer1 = new StreamWriter(file2);// 
-
-            string g = code;
-            string zap = g;
-            string b = "";
-            bool l = control(ref g, ref b);
-            zap = g;
-            if (l)
-            {
-                g = erase_space(g);
-
-                int i = 0;
-
-                while (!String.IsNullOrEmpty(g))
-                {
-                    string f = get_str(ref g);
-                    i++;
-                    bool log = true;
-                    while (!String.IsNullOrEmpty(f))
+                    // if (!File.Exists("keywords.txt")) File.Create("keywords.txt");
+                    // if (!File.Exists("identify.txt")) File.Create("identify.txt");
+                    Token.keys.Clear();
+                    Token.iden.Clear();
+                    while (!String.IsNullOrEmpty(k))
                     {
-                        Token r = new Token();
-                        int a = 0;
-                        string q = get_lex(ref f, ref log, ref a);
-                        r.define(q, a, ref zap);
-                        ending.Add(r);
-                        Code.Tokens.Add(r);
+                        string str = "";
+                        int i = 0;
+                        while (k[i] != ',')
+                        {
+                            str = str + k[i];
+                            i++;
+                        }
+                        if (!String.IsNullOrEmpty(k)) k = k.Substring(i + 1);
+                        Token.keys.Add(str);
+                    }
+                    List<Token> ending = new List<Token>();
+                    // FileStream file1 = new FileStream("keywords.txt", FileMode.Open, FileAccess.Write);
+                    //FileStream file2 = new FileStream("identify.txt", FileMode.Open, FileAccess.Write);
+                    StreamWriter writer = new StreamWriter("keywords.txt", false);
+                    StreamWriter writer1 = new StreamWriter("identify.txt", false);
+
+                    string g = code;
+                    string zap = g;
+                    string b = "";
+                    bool l = control(ref g, ref b);
+                    zap = g;
+                    if (l)
+                    {
+                        g = erase_space(g);
+
+                        int i = 0;
+
+                        while (!String.IsNullOrEmpty(g))
+                        {
+                            string f = get_str(ref g);
+                            i++;
+                            bool log = true;
+                            while (!String.IsNullOrEmpty(f))
+                            {
+                                Token r = new Token();
+                                int a = 0;
+                                string q = get_lex(ref f, ref log, ref a);
+                                r.define(q, a, ref zap);
+                                ending.Add(r);
+                                Code.Tokens.Add(r);
+
+                            }
+
+                        }
+                        for (int j = 0; j < ending.Count; j++)
+                        {
+                            ending[j].conclude();
+                        }
+                        for (int j = 0; j < Token.keys.Count; j++)
+                        {
+                            writer.Write(j);
+                            writer.Write(' ');
+                            writer.WriteLine(Token.keys[j]);
+
+
+                        }
+                        for (int j = 0; j < Token.iden.Count; j++)
+                        {
+                            writer1.Write(j);
+                            writer1.Write(' ');
+                            writer1.WriteLine(Token.iden[j]);
+
+                            Code.Idents.Add(Token.iden[j]);
+                        }
+
+
+                    }
+                    else
+                    {
+                        Code.LexError = "Недопустимый(ые) символ(ы)" + b;
+                        return false;
 
                     }
 
+                    writer.Close();
+                    writer1.Close();
                 }
-                for (int j = 0; j < ending.Count; j++)
+                else
                 {
-                    ending[j].conclude();
+                    Code.LexError = "Файл с ключевыми словами пуст";
+                    return false;
                 }
-                for (int j = 0; j < Token.keys.Count; j++)
-                {
-                    writer.Write(j);
-                    writer.Write(' ');
-                    writer.WriteLine(Token.keys[j]);
-
-                }
-                for (int j = 0; j < Token.iden.Count; j++)
-                {
-                    writer1.Write(j);
-                    writer1.Write(' ');
-                    writer1.WriteLine(Token.iden[j]);
-                    Code.Idents.Add(Token.iden[j]);
-                }
-
             }
             else
             {
-                Code.LexError = "Недопустимый(ые) символ(ы)" + b;
+                Code.LexError = "Нет файла с ключевыми словами";
                 return false;
-
             }
-
-            writer.Close();
-            writer1.Close();
             return true;
 
 
