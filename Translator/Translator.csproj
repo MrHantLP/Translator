@@ -58,6 +58,7 @@
     <Compile Include="Lexer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Semantics.cs" />
     <Compile Include="Synt.cs" />
     <Compile Include="Token.cs" />
     <EmbeddedResource Include="FirstForm.resx">

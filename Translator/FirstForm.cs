@@ -70,7 +70,7 @@ namespace Translator
         //Начинаем анализ кода 
         private void RUN_Click(object sender, EventArgs e)
         {
-            
+
             //Лексический анализ
             Lexer lexer=new Lexer();
             if (lexer.GoAnalyze())
@@ -85,9 +85,16 @@ namespace Translator
 
             //Синтаксический анализ
             Synt syntax = new Synt();
+            Semantics sem = new Semantics();
             if (syntax.GoAnalyze())
             {
-                MessageBox.Show("Ваш код прошёл проверку синтаксического анализатора", "Синтаксический анализатор: Успех =)", MessageBoxButtons.OK);
+                if (sem.GoAnalazy())
+                    MessageBox.Show("Ваш код прошёл проверку синтаксического анализатора", "Синтаксический анализатор: Успех =)", MessageBoxButtons.OK);
+                else
+                {
+                    MessageBox.Show("Ошибка: " + Code.SyntError + "\nПроцесс трансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
+                    return;
+                }
             }
             else
             {
@@ -99,7 +106,7 @@ namespace Translator
             Generation gener=new Generation();
             if (gener.GoGenerate())
             {
-                MessageBox.Show("Ваш код на языке Pascal успешно транслирован на язык C# \nФайл расположен в директории \""+Code.CsPath+"\"", "Генератор кода: Успех =)", MessageBoxButtons.OK);
+                MessageBox.Show("Ваш код на языке Pascal успешно транслирован на язык C# \nФайл расположен в директории \"" + Code.CsPath + "\"", "Генератор кода: Успех =)", MessageBoxButtons.OK);
             }
             else
             {
