@@ -8,6 +8,63 @@ namespace Translator
 {
     class Synt
     {
+        //Токен на котором начало бомбить
+        public class Warning
+        {
+            //id нужного токена, и обнаруженный нетерминал
+            public Configuration.elem nTerm;
+            public Configuration.elem term;
+            public int id;
+            public Warning(int i = -1, Configuration.elem s = new Configuration.elem(), Configuration.elem s1 = new Configuration.elem())
+            {
+                nTerm = s;
+                term = s1;
+                id = i;
+            }
+        }
+        public static Warning warn = new Warning();
+        //Формируем ошибку
+        void ErrorForm(Warning w)
+        {
+            Code.SyntError = "";
+            Code.SyntError += "В строке " + Code.Tokens[warn.id].str_num + " столбце " + Code.Tokens[warn.id].pos_num + " встречено \"" + Code.Tokens[warn.id].value + "\" ";
+            if (!w.term.term)
+            {
+                Pravilo current = Gramma.p.Find(x => x.leftSide == warn.term.value);
+                if ((current.leftSide != "letter") && (current.leftSide != "digit"))
+                    while (current.rightSide[0][0].terminal != "")
+                    {
+                        current = Gramma.p.Find(x => x.leftSide == current.rightSide[0][0].notTerminal);
+                    }
+                else
+                {
+                    if (current.leftSide == "letter")
+                        Code.SyntError += "ожидался идентификатор.";
+                    if (current.leftSide == "digit")
+                        Code.SyntError += "ожидалась цифра.";
+                    return;
+                }
+                Code.SyntError += "ожидалось \"" + current.rightSide[0][0].terminal + "\".";
+            }
+            {
+                Code.SyntError += "ожидалось \"" +w.term.value+"\" или возможная альтернатива.";
+                /*Code.SyntError += "ожидалось ";
+                Pravilo current = Gramma.p.Find(x => x.leftSide == warn.nTerm.value);
+                foreach (var item in current.rightSide)
+                {
+                    if (item[0].terminal!="")
+                    {
+                        Code.SyntError +="\""+item[0].terminal + "\" или ";
+                    }
+                } 
+                Code.SyntError=Code.SyntError.Remove(Code.SyntError.LastIndexOf("или"));
+                Code.SyntError += ".";    */
+
+
+            }
+
+
+        }
         //Обработка текста для нужд синтаксического анализатора
         public Synt()
         {
@@ -65,12 +122,11 @@ namespace Translator
             Stack<Configuration> history = new Stack<Configuration>();
             history.Push(config);
 
-
             while (true) //додумать условие цикла
             {
                 //Отношение перехода делаем на токенах
 
-                if (config.s == 'q')
+                if (config.s == 'q')     
                 {
                     if (config.L2.Count != 0)
                     {
@@ -201,6 +257,11 @@ namespace Translator
                             //"Успешное сравнение"
                             if ((Code.Tokens[config.i].value == item.value) || (item.value == "lambda"))
                             {
+                                if ((warn != null) && (warn.id < config.i))
+                                {
+                                    //Убираем подозрительный токен
+                                    warn = new Warning();
+                                }
                                 config.L2.Pop();
                                 config.L1.Push(item);
                                 if (item.value != "lambda") config.i++;
@@ -208,7 +269,14 @@ namespace Translator
                             //4 пункт отношения. Не успешное сравнение
                             else
                             {
-
+                                //Сохраняем подозрительный токен
+                                if (warn.id < config.i)
+                                {
+                                    warn = new Warning();
+                                    warn.nTerm = config.L1.Peek();
+                                    warn.term = item;
+                                    warn.id = config.i;
+                                }
                                 config.s = 'b';
                             }
                             history.Push(config);
@@ -222,12 +290,13 @@ namespace Translator
                             config.s = 't';
                             config.L2.Push(new Configuration.elem("lambda", true, 0));
                             history.Push(config);
-                            Code.conclusion= config.Seq();
+                            Code.conclusion = config.Seq();
                             return true;
                         }
                         else
                         {
-                            Code.SyntError = "Неожиданный конец файла";
+                            ErrorForm(warn);
+                            //Code.SyntError = "Неожиданный конец файла";
                             return false;
                         }
                     }
@@ -249,7 +318,15 @@ namespace Translator
                             {
                                 for (int elemIndex = 0; elemIndex < current.rightSide[item.altIndex - 1].Count; elemIndex++)
                                 {
-                                    config.L2.Pop();
+                                    if (config.L2.Count != 0)
+                                    {
+                                        config.L2.Pop();
+                                    }
+                                    else
+                                    {
+                                        ErrorForm(warn);
+                                        return false;
+                                    }
                                 }
                                 for (int elemIndex = current.rightSide[item.altIndex].Count - 1; elemIndex >= 0; elemIndex--)//суём j+1 альтернативу в магазин L2 по элементно
                                 {
@@ -268,10 +345,12 @@ namespace Translator
                             }
                             else
                             {
-                                if (config.i == 1 && item.value == "main")
+                                if (config.i == 0 && item.value == "main")
                                 //б. прекращение разбора
                                 {
-                                    Code.SyntError = "Цепочка не принадлежит языку";
+                                    ErrorForm(warn);
+                                    //Code.SyntError = "Цепочка не принадлежит языку";
+                                    return false;
                                 }
                                 else
                                 //в. Отмена результата

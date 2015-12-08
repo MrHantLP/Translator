@@ -79,7 +79,7 @@ namespace Translator
             }
             else
             {
-                MessageBox.Show("Ошибка: " + Code.LexError + "\nПроцесстрансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
+                MessageBox.Show("Ошибка: " + Code.LexError + "\nПроцесс трансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
                 return;
             }
 
@@ -91,7 +91,7 @@ namespace Translator
             }
             else
             {
-                MessageBox.Show("Ошибка: " + Code.SyntError + "\nПроцесстрансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
+                MessageBox.Show("Ошибка: " + Code.SyntError + "\nПроцесс трансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
                 return;
             }
 
@@ -103,7 +103,7 @@ namespace Translator
             }
             else
             {
-                MessageBox.Show("Ошибка: " + Code.GenerationError + "\nПроцесстрансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
+                MessageBox.Show("Ошибка: " + Code.GenerationError + "\nПроцесс трансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
                 return;
             }
             Code.Idents = new List<String>();

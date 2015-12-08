@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Translator
 {
-    class Configuration
+    public class Configuration
     {
         //Состояние алгоритма
         public Char s;

@@ -451,6 +451,11 @@ namespace Translator
             f.rightSide = new List<List<Pravilo.structRightSide>>();
             f.rightSide.Add(alternative);
 
+            alternative = new List<Pravilo.structRightSide>();
+            alternative.Add(new Pravilo.structRightSide("", "lambda"));
+            f.rightSide.Add(alternative);
+
+
             p.Add(f);
 
 

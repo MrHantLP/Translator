@@ -24,6 +24,8 @@ namespace Translator
         public static String GenerationError;
         public static List<Token> Tokens = new List<Token>();
         public static List<String> Idents = new List<String>();
+        
+
         //Вывод
         public static string conclusion;
 
