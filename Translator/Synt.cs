@@ -47,7 +47,15 @@ namespace Translator
                 Code.SyntError += "ожидалось \"" + current.rightSide[0][0].terminal + "\".";
             }
             {
-                Code.SyntError += "ожидалось \"" +w.term.value+"\" или возможная альтернатива.";
+                if (!w.nTerm.term)
+                {
+                    if (w.nTerm.value == "letter")
+                        Code.SyntError += "ожидался идентификатор.";
+                    if (w.nTerm.value == "digit")
+                        Code.SyntError += "ожидалась цифра.";
+                }
+                else
+                    Code.SyntError += "ожидалось \"" + w.term.value + "\" или возможная альтернатива.";
                 /*Code.SyntError += "ожидалось ";
                 Pravilo current = Gramma.p.Find(x => x.leftSide == warn.nTerm.value);
                 foreach (var item in current.rightSide)
@@ -126,7 +134,7 @@ namespace Translator
             {
                 //Отношение перехода делаем на токенах
 
-                if (config.s == 'q')     
+                if (config.s == 'q')
                 {
                     if (config.L2.Count != 0)
                     {
@@ -253,31 +261,39 @@ namespace Translator
                         //2 пункт отношения, "На верху L2 терминал сравниваем входной токен"
                         else
                         {
-                            Configuration.elem item = new Configuration.elem(config.L2.Peek());
-                            //"Успешное сравнение"
-                            if ((Code.Tokens[config.i].value == item.value) || (item.value == "lambda"))
+                            if (config.i < Code.Tokens.Count)
                             {
-                                if ((warn != null) && (warn.id < config.i))
+                                Configuration.elem item = new Configuration.elem(config.L2.Peek());
+                                //"Успешное сравнение"
+                                if ((Code.Tokens[config.i].value == item.value) || (item.value == "lambda"))
                                 {
-                                    //Убираем подозрительный токен
-                                    warn = new Warning();
+                                    if ((warn != null) && (warn.id < config.i))
+                                    {
+                                        //Убираем подозрительный токен
+                                        warn = new Warning();
+                                    }
+                                    config.L2.Pop();
+                                    config.L1.Push(item);
+                                    if (item.value != "lambda") config.i++;
                                 }
-                                config.L2.Pop();
-                                config.L1.Push(item);
-                                if (item.value != "lambda") config.i++;
+                                //4 пункт отношения. Не успешное сравнение
+                                else
+                                {
+                                    //Сохраняем подозрительный токен
+                                    if (warn.id < config.i)
+                                    {
+                                        warn = new Warning();
+                                        warn.nTerm = config.L1.Peek();
+                                        warn.term = item;
+                                        warn.id = config.i;
+                                    }
+                                    config.s = 'b';
+                                }
                             }
-                            //4 пункт отношения. Не успешное сравнение
                             else
                             {
-                                //Сохраняем подозрительный токен
-                                if (warn.id < config.i)
-                                {
-                                    warn = new Warning();
-                                    warn.nTerm = config.L1.Peek();
-                                    warn.term = item;
-                                    warn.id = config.i;
-                                }
-                                config.s = 'b';
+                                Code.SyntError = "Неожиданный конец файла";
+                                return false;
                             }
                             history.Push(config);
                         }

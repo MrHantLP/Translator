@@ -364,7 +364,7 @@ namespace Translator
             {
                 res = res + str[0];
                 int i = 1;
-                while (!sym_limit.Contains(str[i]) && !sym_oper.Contains(str[i]) && str[i] != '.' && str[i] != ' ' && str[i] != '\'')
+                while (i<str.Length && !sym_limit.Contains(str[i]) && !sym_oper.Contains(str[i]) && str[i] != '.' && str[i] != ' ' && str[i] != '\'')
                 {
                     res = res + str[i];
                     i++;
