@@ -96,7 +96,33 @@ namespace Translator
                                 }
                             }
                             if (Code.Tokens[i].value == "[")
-                                i = Code.Tokens.IndexOf(Code.Tokens.Find(x => (x.value == "]") && Code.Tokens.IndexOf(x) > i),i);
+                            {
+                                int p = Code.Tokens.IndexOf(Code.Tokens.Find(x => (x.value == "]") && Code.Tokens.IndexOf(x) > i), i);
+                                for (; i< p; i++)
+                                {
+                                    if ((Code.Tokens[i].klass == "строка") || (Code.Tokens[i].klass == "число   "))
+                                    {
+                                        if (Code.Tokens[i].type != "integer")
+                                        {
+                                            Code.SyntError = "В строке " + Code.Tokens[indexT].str_num + " индекс массива должен иметь тип \"integer\" ";
+                                            return false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (Code.Tokens[i].klass == "идентификатор")
+                                        {
+                                            if (ids.Find(x => x.key == Code.Tokens[i].value).type != "integer")
+                                            {
+                                                Code.SyntError = "В строке " + Code.Tokens[indexT].str_num + " индекс массива должен иметь тип \"integer\" ";
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                }
+                                       
+                            }
+
                         }
 
                     }
