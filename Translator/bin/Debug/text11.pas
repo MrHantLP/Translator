@@ -4,11 +4,14 @@ var s1,s2:string;
 	a: array [1..10] of integer;
 begin
     readln(s1); s2:='';
-    for i:=20 downto 1 do begin
+    for i:=20 downto 3 do begin
        
-	   s2:=s2+s1[i];
+	   s2:=s2 + s1;
 	   i:=i mod 2;
     end;
-    if s1=s2 then writeln(s1, '- perevertish')
+	while ((s2>s1) and (s1>s2)) do begin
+		i:=i+2;
+	end;
+    if s1=s2 then writeln(s1, 'прарпа')
              else  writeln(s1, ' - ne perevertish');
 end.

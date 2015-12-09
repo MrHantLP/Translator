@@ -74,8 +74,12 @@ namespace Translator
                  || (Code.Tokens[indexT + 1].value == ">")
                  || (Code.Tokens[indexT + 1].value == ">="))
                 {
-                    int indexLast = Code.Tokens.IndexOf(Code.Tokens.Find(x => (x.value == ";"||x.value == "begin") && Code.Tokens.IndexOf(x) > indexT), indexT);
-                    for (int i = indexT+2; i < indexLast; i++)
+                    int indexLast;
+                    if (Code.Tokens[indexT + 1].value == ":=")
+                        indexLast = Code.Tokens.IndexOf(Code.Tokens.Find(x => (x.value == ";"||x.value == "begin") && Code.Tokens.IndexOf(x) > indexT), indexT);
+                    else
+                        indexLast = Code.Tokens.IndexOf(Code.Tokens.Find(x => (x.value == ")" || x.value == "then" || x.value == "begin") && Code.Tokens.IndexOf(x) > indexT), indexT);
+                    for (int i = indexT + 2; i < indexLast; i++)
                     {
                         if ((Code.Tokens[i].klass == "строка") || (Code.Tokens[i].klass == "число   "))
                         {
@@ -84,6 +88,7 @@ namespace Translator
                                 Code.SyntError = "В строке " + Code.Tokens[indexT].str_num + " столбце " + Code.Tokens[indexT].pos_num + " правая часть выражения должна иметь тип \"" + ids.Find(x => x.key == Code.Tokens[indexT].value).type + "\" ";
                                 return false;
                             }
+
                         }
                         else
                         {
@@ -95,10 +100,24 @@ namespace Translator
                                     return false;
                                 }
                             }
+                            if ((Code.Tokens[i].klass == "оператор" || Code.Tokens[i].klass == "ключевое слово") && (ids.Find(x => x.key == Code.Tokens[indexT].value).type == "string"))
+                            {
+                                if ((Code.Tokens[i].value != "+")
+                                    && (Code.Tokens[i].value != "=")
+                                    && (Code.Tokens[i].value != "<>")
+                                    && (Code.Tokens[i].value != "<")
+                                    && (Code.Tokens[i].value != "<=")
+                                    && (Code.Tokens[i].value != ">")
+                                    && (Code.Tokens[i].value != ">="))
+                                {
+                                    Code.SyntError = "В строке " + Code.Tokens[indexT].str_num + " строки можем только складывать";
+                                    return false;
+                                }
+                            }
                             if (Code.Tokens[i].value == "[")
                             {
                                 int p = Code.Tokens.IndexOf(Code.Tokens.Find(x => (x.value == "]") && Code.Tokens.IndexOf(x) > i), i);
-                                for (; i< p; i++)
+                                for (; i < p; i++)
                                 {
                                     if ((Code.Tokens[i].klass == "строка") || (Code.Tokens[i].klass == "число   "))
                                     {
@@ -120,7 +139,7 @@ namespace Translator
                                         }
                                     }
                                 }
-                                       
+
                             }
 
                         }
