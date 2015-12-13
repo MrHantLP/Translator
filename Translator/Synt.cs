@@ -50,11 +50,14 @@ namespace Translator
                 if (!w.nTerm.term)
                 {
                     if (w.nTerm.value == "letter")
-                        Code.SyntError += "ожидался идентификатор.";           
-                    if (w.nTerm.value == "digit")
-                        Code.SyntError += "ожидалась цифра.";
+                        Code.SyntError += "ожидался идентификатор.";
                     else
-                        Code.SyntError += "ожидалось \"" + w.term.value + "\" или возможная альтернатива.";
+                    {
+                        if (w.nTerm.value == "digit")
+                            Code.SyntError += "ожидалась цифра.";
+                        else
+                            Code.SyntError += "ожидалось \"" + w.term.value + "\" или возможная альтернатива.";
+                    }
                 }
                 else
                     Code.SyntError += "ожидалось \"" + w.term.value + "\" или возможная альтернатива.";

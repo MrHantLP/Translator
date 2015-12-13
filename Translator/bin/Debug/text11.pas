@@ -12,6 +12,6 @@ begin
 	while ((s2>s1) and (s1>s2)) do begin
 		i:=i+2;
 	end;
-    if s1=s2 then writeln(s1, 'прарпа')
+    if s1=s2 then writeln(s1, 'perev')
              else  writeln(s1, ' - ne perevertish');
 end.

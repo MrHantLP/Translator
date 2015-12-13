@@ -110,7 +110,7 @@ namespace Translator
             }
             else
             {
-                MessageBox.Show("Ошибка: " + Code.GenerationError + "\nПроцесс трансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
+                MessageBox.Show(Code.GenerationError + "\nПроцесс трансляции будет прерван", "Название ошибки", MessageBoxButtons.OK); //ошибки нужно рассказывать
                 return;
             }
             Code.Idents = new List<String>();
