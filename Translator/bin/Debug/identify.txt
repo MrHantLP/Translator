@@ -1,5 +1,12 @@
-0 primer1
-1 s1
-2 s2
-3 i
-4 a
+0 testall
+1 constanta
+2 masint
+3 masreal
+4 masstring
+5 stint
+6 ndint
+7 i
+8 streal
+9 ndreal
+10 ststring
+11 ndstring

@@ -57,7 +57,21 @@ namespace Translator
                 }
                 if (!Semantics.ids[index].array)
                 {
-                    sharpCode += deep + type + " " + Semantics.ids[index].key + ";\n";
+                    if (!Semantics.ids[index].constant)
+                    {
+                        if (type == "int" || type == "double")
+                        {
+                            sharpCode += deep + type + " " + Semantics.ids[index].key + " = 0;\n";
+                        }
+                        else
+                        {
+                            sharpCode += deep + type + " " + Semantics.ids[index].key + " = \"\";\n";
+                        }
+
+                    }
+                    else
+                        sharpCode += deep + "const " + type + " " + Semantics.ids[index].key + " = " + Code.Tokens[Code.Tokens.FindIndex(x => x.value == Semantics.ids[index].key) + 2].value + ";\n";
+
 
                 }
                 else
@@ -87,41 +101,57 @@ namespace Translator
 
 
 
-            while (indexT < Code.Tokens.Count-2)
+            while (indexT < Code.Tokens.Count - 2)
             {
                 switch (Code.Tokens[indexT].value)
                 {
+                    case ":=":
+                        indexT++;
+                        sharpCode += " = ";
+                        break;
                     case "begin":
-                        sharpCode += deep + "{\n";
+                        sharpCode += "\n" + deep + "{\n";
                         deep += "      ";
                         indexT++;
                         break;
                     case "end":
-                        sharpCode += deep + "}\n";
                         deep = deep.Remove(0, 6);
+                        sharpCode += deep + "}\n";
                         indexT++;
                         break;
                     case "read":
                         {
                             indexT++;
+                            bool read=false;
                             String tmp = " = Console.Read();\n";
                             while (Code.Tokens[++indexT].value != ")")
                             {
                                 if (Code.Tokens[indexT].value != ",")
+                                {
                                     sharpCode += deep + Code.Tokens[indexT].value + tmp;
+                                    read = true;
+                                }
                             }
+                            if (!read)
+                                sharpCode +=deep+ "Console.ReadLine();\n";
                             indexT += 2;//пропускаем ;
                         }
                         break;
                     case "readln":
                         {
                             indexT++;
+                            bool read=false;
                             String tmp = " = Console.ReadLine();\n";
                             while (Code.Tokens[++indexT].value != ")")
                             {
                                 if (Code.Tokens[indexT].value != ",")
+                                {
                                     sharpCode += deep + Code.Tokens[indexT].value + tmp;
+                                    read = true;
+                                }
                             }
+                            if (!read)
+                                sharpCode += deep+ "Console.ReadLine();\n";
                             indexT += 2;//пропускаем ;
                         }
                         break;
@@ -150,26 +180,190 @@ namespace Translator
                                     sharpCode += "+";
                                 else
                                     sharpCode += Code.Tokens[indexT].value.Replace("'", "\"");
-                            }           
+                            }
                             sharpCode += ");\n";
                             indexT += 2;
                         }
                         break;
 
+                    case "if":
+                        {
+                            indexT++;
+                            sharpCode += deep + "if (";
+                            while (Code.Tokens[indexT].value != "then")
+                            {
+                                switch (Code.Tokens[indexT].value)
+                                {
+                                    case "and":
+                                        sharpCode += "&&";
+                                        break;
+                                    case "or":
+                                        sharpCode += "||";
+                                        break;
+                                    case "<>":
+                                        sharpCode += "!=";
+                                        break;
+                                    case "mod":
+                                        sharpCode += "%";
+                                        break;
+                                    case "div":
+                                        sharpCode += "/";
+                                        break;
+                                    case "=":
+                                        sharpCode += "==";
+                                        break;
+                                    default:
+                                        sharpCode += Code.Tokens[indexT].value.Replace("'", "\"");
+                                        break;
+                                }
+                                indexT++;
+                            }
+                            sharpCode += ") ";
+                        }
+                        break;
+                    case "while":
+                        {
+                            indexT++;
+                            sharpCode += deep + "while (";
+                            while (Code.Tokens[indexT].value != "do")
+                            {
+                                switch (Code.Tokens[indexT].value)
+                                {
+                                    case "and":
+                                        sharpCode += "&&";
+                                        break;
+                                    case "or":
+                                        sharpCode += "||";
+                                        break;
+                                    case "=":
+                                        sharpCode += "==";
+                                        break;
+                                    case "mod":
+                                        sharpCode += "%";
+                                        break;
+                                    case "div":
+                                        sharpCode += "/";
+                                        break;
+                                    default:
+                                        sharpCode += Code.Tokens[indexT].value.Replace("'", "\"");
+                                        break;
+                                }
+                                indexT++;
+                            }
+                            sharpCode += ") ";
+                        }
+                        break;
+                    case "mod":
+                        {
+                            indexT++;
+                            sharpCode += "%";
+                        }
+                        break;
+                    case "div":
+                        {
+                            indexT++;
+                            sharpCode += "/";
+                        }
+                        break;
+                    case "for":
+                        {
+                            indexT++;
+                            bool to=true;
+                            String id = Code.Tokens[indexT].value;
+                            sharpCode += deep + "for (";
+                            while (Code.Tokens[indexT].value != "do")
+                            {
+                                switch (Code.Tokens[indexT].value)
+                                {
+                                    case "mod":
+                                        sharpCode += "%";
+                                        break;
+                                    case "div":
+                                        sharpCode += "/";
+                                        break;
+                                    case ":=":
+                                        sharpCode += "=";
+                                        break;
+                                    case "downto":
+                                        {
+                                            to = false;
+                                            sharpCode += "; " + id + ">=";
+                                        }
+                                        break;
+                                    case "to":
+                                        {
+                                            to = true;
+                                            sharpCode += "; " + id + "<=";
+                                        }
+                                        break;
+                                    default:
+                                        sharpCode += Code.Tokens[indexT].value.Replace("'", "\"");
+                                        break;
+                                }
+                                indexT++;
+                            }
+                            if (to)
+                                sharpCode += "; " + id + "++";
+                            else
+                                sharpCode += "; " + id + "--";
+                            sharpCode += ") ";
+                        }
+                        break;
+                    case "else":
+                        {
+                            indexT++;
+                            sharpCode += deep + "else";
+                        }
+                        break;
 
                     case ";":
                         {
                             indexT++;
+                            if (sharpCode[sharpCode.Length - 2] != '}')
+                                sharpCode += ";\n";
                         }
+                        break;
+                    case "[":
+                        indexT++;
+                        sharpCode += "[";
+                        break;
+                    case "]":
+                        indexT++;
+                        sharpCode += "]";
+                        break;
+                    case "+":
+                        indexT++;
+                        sharpCode += "+";
+                        break;
+                    case "-":
+                        indexT++;
+                        sharpCode += "-";
+                        break;
+                    case "*":
+                        indexT++;
+                        sharpCode += "*";
+                        break;
+                    case "/":
+                        indexT++;
+                        sharpCode += "/";
+                        break;
+                    case "(":
+                        indexT++;
+                        sharpCode += "(";
+                        break;
+                    case ")":
+                        indexT++;
+                        sharpCode += ")";
                         break;
                     default:
-                        if (Code.Tokens[indexT].klass == "идентификатор")
-                        {
-                            sharpCode += deep + Code.Tokens[indexT].value;
-                        }
+                        if ((Code.Tokens[indexT].klass == "идентификатор") || (Code.Tokens[indexT].klass == "строка") || (Code.Tokens[indexT].klass == "число   "))
+                            if (sharpCode[sharpCode.Length - 1] == '\n')
+                                sharpCode += deep + Code.Tokens[indexT].value.Replace("'", "\"");
+                            else
+                                sharpCode += Code.Tokens[indexT].value.Replace("'", "\"");
                         indexT++;
                         break;
-                }          
+                }
             }
 
 

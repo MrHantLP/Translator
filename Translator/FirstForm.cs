@@ -106,7 +106,7 @@ namespace Translator
             Generation gener=new Generation();
             if (gener.GoGenerate())
             {
-                MessageBox.Show("Ваш код на языке Pascal успешно транслирован на язык C# \nФайл расположен в директории \"" + Code.CsPath + "\"", "Генератор кода: Успех =)", MessageBoxButtons.OK);
+                MessageBox.Show("Ваш код на языке Pascal успешно транслирован на язык C# \nФайл расположен в директории \"" + Path.GetDirectoryName(Path.GetFullPath(Code.PasPath)) + "\"\nИмя файла: \""+Path.GetFileName(Path.GetFullPath(Code.PasPath)).Replace(".pas",".cs")+"\"", "Генератор кода: Успех =)", MessageBoxButtons.OK);
             }
             else
             {

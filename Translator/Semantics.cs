@@ -13,11 +13,13 @@ namespace Translator
             public String key;
             public String type;
             public bool array;
-            public Ident(String k = "", String t = "", bool a = false)
+            public bool constant;
+            public Ident(String k = "", String t = "", bool a = false, bool c = false)
             {
                 key = k;
                 type = t;
                 array = a;
+                constant = c;
 
             }
         }
@@ -37,15 +39,23 @@ namespace Translator
                     Code.Idents.Remove(item.value);
                     if (index != 1)
                     {
-                        //Берём токен следующий за ограничителем : после текущего идентфикатора
-                        String tmp = Code.Tokens[Code.Tokens.IndexOf(Code.Tokens.Find(x => x.value == ":" && Code.Tokens.IndexOf(x)>index), index, indexBegin - index)+1].value;
-                        if (tmp != "array")
-                            ids.Add(new Ident(item.value, tmp));
+                        //Проверяем а может это константа
+                        if (Code.Tokens.FindIndex(x => x.value == "var") >= index)
+                        {
+                            ids.Add(new Ident(item.value, Code.Tokens[index + 2].type, false, true));
+                        }
                         else
                         {
-                            //Если встретили массив обрабатываем чуть по глубже
-                            tmp = Code.Tokens[Code.Tokens.IndexOf(Code.Tokens.Find(x => x.value == "of" && Code.Tokens.IndexOf(x) > index), index, indexBegin - index) + 1].value;
-                            ids.Add(new Ident(item.value, tmp, true));
+                            //Берём токен следующий за ограничителем : после текущего идентфикатора
+                            String tmp = Code.Tokens[Code.Tokens.IndexOf(Code.Tokens.Find(x => x.value == ":" && Code.Tokens.IndexOf(x)>index), index, indexBegin - index)+1].value;
+                            if (tmp != "array")
+                                ids.Add(new Ident(item.value, tmp));
+                            else
+                            {
+                                //Если встретили массив обрабатываем чуть по глубже
+                                tmp = Code.Tokens[Code.Tokens.IndexOf(Code.Tokens.Find(x => x.value == "of" && Code.Tokens.IndexOf(x) > index), index, indexBegin - index) + 1].value;
+                                ids.Add(new Ident(item.value, tmp, true));
+                            }
                         }
                     }
                     else
@@ -76,7 +86,7 @@ namespace Translator
                 {
                     int indexLast;
                     if (Code.Tokens[indexT + 1].value == ":=")
-                        indexLast = Code.Tokens.IndexOf(Code.Tokens.Find(x => (x.value == ";"||x.value == "begin") && Code.Tokens.IndexOf(x) > indexT), indexT);
+                        indexLast = Code.Tokens.IndexOf(Code.Tokens.Find(x => (x.value == ";" || x.value == "begin") && Code.Tokens.IndexOf(x) > indexT), indexT);
                     else
                         indexLast = Code.Tokens.IndexOf(Code.Tokens.Find(x => (x.value == ")" || x.value == "then" || x.value == "begin") && Code.Tokens.IndexOf(x) > indexT), indexT);
                     for (int i = indexT + 2; i < indexLast; i++)
@@ -85,8 +95,12 @@ namespace Translator
                         {
                             if (Code.Tokens[i].type != ids.Find(x => x.key == Code.Tokens[indexT].value).type)
                             {
-                                Code.SyntError = "В строке " + Code.Tokens[indexT].str_num + " столбце " + Code.Tokens[indexT].pos_num + " правая часть выражения должна иметь тип \"" + ids.Find(x => x.key == Code.Tokens[indexT].value).type + "\" ";
-                                return false;
+                                if (!((Code.Tokens[i].type == "integer") && ids.Find(x => x.key == Code.Tokens[indexT].value).type == "real"))
+                                {
+                                    Code.SyntError = "В строке " + Code.Tokens[indexT].str_num + " столбце " + Code.Tokens[indexT].pos_num + " правая часть выражения должна иметь тип \"" + ids.Find(x => x.key == Code.Tokens[indexT].value).type + "\" ";
+                                    return false;
+                                }
+
                             }
 
                         }
