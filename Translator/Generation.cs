@@ -334,6 +334,35 @@ namespace Translator
                     case "+":
                         indexT++;
                         sharpCode += "+";
+                        //Оптимизируем 
+                        if (Code.Tokens[indexT].value == "1")
+                        {
+                            int specIndexR = Code.Tokens.FindLastIndex(indexT, x => x.value == ":=")+1;
+                            Token cheker = Code.Tokens[specIndexR-1];
+                            int specIndexL = Code.Tokens.FindLastIndex(indexT, x=> x.value==";"||x.value=="begin")+1;
+                            if (specIndexL<specIndexR)
+                            {
+                                while (Code.Tokens[specIndexL].value==Code.Tokens[specIndexR].value)
+                                {
+                                    specIndexR++;
+                                    specIndexL++;
+                                }
+                                if (Code.Tokens[specIndexL]==cheker)
+                                {
+                                    int lastIndexDel = sharpCode.LastIndexOf("=")+2;
+                                    int indexDel = sharpCode.LastIndexOf(";");
+                                    if (indexDel < sharpCode.LastIndexOf("}"))
+                                        indexDel = sharpCode.LastIndexOf("}");
+                                    if (indexDel < sharpCode.LastIndexOf("{"))
+                                        indexDel = sharpCode.LastIndexOf("{");
+                                    indexDel += 2 + deep.Length;
+                                    sharpCode =sharpCode.Remove(indexDel, lastIndexDel-indexDel);                                
+                                    sharpCode += "+";
+                                    indexT++;
+                                }
+                            } 
+                        }    
+
                         break;
                     case "-":
                         indexT++;

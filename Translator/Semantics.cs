@@ -28,8 +28,27 @@ namespace Translator
         public bool GoAnalazy()
         {
 
+
+
+
             //Собираем идентификаторы и их типы
             int indexBegin = Code.Tokens.IndexOf(Code.Tokens.Find(x=> x.value=="begin"));
+
+            //Оптимизация - удаление лишних идентификаторов
+            for (int i = 1; i < Code.Idents.Count; i++)
+            {
+                if (Code.Tokens.FindIndex(indexBegin, Code.Tokens.Count - indexBegin, x => x.value == Code.Idents[i]) == -1)
+                {
+                    int start =Code.Tokens.FindIndex(x => x.value == Code.Idents[i]);
+                    int length = Code.Tokens.FindIndex(start,x=>x.value==","||x.value==";")-start+1;
+                    Code.Tokens.RemoveRange(start, length);
+                    Code.Idents.RemoveAt(i);
+                    i--;
+                }
+
+            }
+
+            indexBegin = Code.Tokens.IndexOf(Code.Tokens.Find(x => x.value == "begin"));
 
             foreach (var item in Code.Tokens)
             {
@@ -63,6 +82,7 @@ namespace Translator
 
                 }
             }
+
             if (Code.Idents.Count != 0)
             {
                 int indexToken = Code.Tokens.IndexOf(Code.Tokens.Find(x=> x.value==Code.Idents[0]&& Code.Tokens.IndexOf(x)>indexBegin), indexBegin);
@@ -74,7 +94,8 @@ namespace Translator
             int indexT = indexBegin+1;//индекс текущего токена
             while (indexT < Code.Tokens.Count && indexT > indexBegin)
             {
-                indexT = Code.Tokens.IndexOf(Code.Tokens.Find(x => x.klass == "идентификатор" && Code.Tokens.IndexOf(x) > indexT), indexT);
+                if (Code.Tokens[indexT].klass != "идентификатор")
+                    indexT = Code.Tokens.IndexOf(Code.Tokens.Find(x => x.klass == "идентификатор" && Code.Tokens.IndexOf(x) > indexT), indexT);
 
                 if ((Code.Tokens[indexT + 1].value == ":=")
                  || (Code.Tokens[indexT + 1].value == "=")
@@ -110,8 +131,11 @@ namespace Translator
                             {
                                 if (ids.Find(x => x.key == Code.Tokens[indexT].value).type != ids.Find(x => x.key == Code.Tokens[i].value).type)
                                 {
-                                    Code.SyntError = "В строке " + Code.Tokens[indexT].str_num + " столбце " + Code.Tokens[indexT].pos_num + " правая часть выражения должна иметь тип \"" + ids.Find(x => x.key == Code.Tokens[indexT].value).type + "\", а встречен " + ids.Find(x => x.key == Code.Tokens[i].value).key + " с типом \"" + ids.Find(x => x.key == Code.Tokens[i].value).type + "\"";
-                                    return false;
+                                    if (!((Code.Tokens[i].type == "integer") && ids.Find(x => x.key == Code.Tokens[indexT].value).type == "real"))
+                                    {
+                                        Code.SyntError = "В строке " + Code.Tokens[indexT].str_num + " столбце " + Code.Tokens[indexT].pos_num + " правая часть выражения должна иметь тип \"" + ids.Find(x => x.key == Code.Tokens[indexT].value).type + "\", а встречен " + ids.Find(x => x.key == Code.Tokens[i].value).key + " с типом \"" + ids.Find(x => x.key == Code.Tokens[i].value).type + "\"";
+                                        return false;
+                                    }
                                 }
                             }
                             if ((Code.Tokens[i].klass == "оператор" || Code.Tokens[i].klass == "ключевое слово") && (ids.Find(x => x.key == Code.Tokens[indexT].value).type == "string"))
@@ -124,7 +148,7 @@ namespace Translator
                                     && (Code.Tokens[i].value != ">")
                                     && (Code.Tokens[i].value != ">="))
                                 {
-                                    Code.SyntError = "В строке " + Code.Tokens[indexT].str_num + " строки можем только складывать";
+                                    Code.SyntError = "В строке " + Code.Tokens[indexT].str_num + " строки можно только складывать";
                                     return false;
                                 }
                             }
@@ -160,8 +184,10 @@ namespace Translator
 
                     }
                 }
-            }
 
+                indexT++;
+            }
+             
 
             return true;
         }
